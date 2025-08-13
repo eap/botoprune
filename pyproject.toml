@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = 'botoprune'
-version = '0.1.0'
+version = '1.0.0'
 description = "Reduce the installed size of botocore by removing unnecessary AWS api data."
 readme = {file = 'README.md', content-type='text/markdown'}
 authors = [
@@ -21,7 +21,7 @@ dependencies = [
 ]
 keywords = ['botocore', 'boto3', 'boto-prune', 'botoprune', 'boto-trim', 'bototrim']
 classifiers = [
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
     'Operating System :: OS Independent',
     'Operating System :: POSIX',
     'Operating System :: POSIX :: Linux',
