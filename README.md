@@ -3,7 +3,7 @@ Botoprune is a Python library used to reduce the installed size of botocore by r
 
 # Using Botoprune.
 
-The cheif application of this library is in the building of small Docker images. Because docker images are built in layers, any file created in one layer still takes up spaces in the final image. This means that Botoprune must be run in the same RUN instruction that installs boto3/botocore preventing the unnecessary data from being committed to the final layer.
+The chief application of this library is in the building of small Docker images. Because docker images are built in layers, any file created in one layer still takes up spaces in the final image. This means that Botoprune must be run in the same RUN instruction that installs boto3/botocore preventing the unnecessary data from being committed to the final layer.
 
 ```
 # Docker step to install boto3 and remove all API data except that necessary for s3, ec2, and kms
