@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = 'botoprune'
+version = '0.1.0'
+description = "Reduce the installed size of botocore by removing unnecessary AWS api data."
+readme = {file = 'README.md', content-type='text/markdown'}
+authors = [
+    {name = 'Evan Parker'},
+]
+maintainers = [
+    {name = 'Evan Parker'},
+]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = '>=3.9'
+dependencies = [
+    "botocore>=1.23.26"
+]
+keywords = ['botocore', 'boto3', 'boto-prune', 'botoprune', 'boto-trim', 'bototrim']
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Operating System :: OS Independent',
+    'Operating System :: POSIX',
+    'Operating System :: POSIX :: Linux',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3 :: Only',
+    'Topic :: Software Development :: Build Tools',
+    'Topic :: Software Development :: Libraries',
+    'Topic :: Software Development :: Libraries :: Python Modules'
+]
+
+[project.urls]
+Homepage = "https://github.com/eap/botoprune"
+Repository = "https://github.com/eap/botoprune"
+Issues = "https://github.com/eap/botoprune/issues"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=6.0",
+    "flake8>=7.3.0",
+    "Flake8-pyproject>=1.2.3",
+]
+
+[tool.setuptools]
+packages = ["botoprune"]
+
+[tool.flake8]
+max-line-length = 100
+count = true
+
+[tool.pytest.ini_options]
+addopts = '-m "not destructive"'
+markers = [
+    "destructive: marks tests as destructive, select with 'pytest --destructive'"
+]
