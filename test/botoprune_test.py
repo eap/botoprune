@@ -30,23 +30,12 @@ class TestBotoprune(unittest.TestCase):
         self.assertNotIn('s3', kept)
         self.assertNotIn('s3control', kept)
         self.assertNotIn('ec2', kept)
-
-    def test_whitelist_prune_services_prefix(self):
-        whitelist = ['s3', 's3control', 'ec2']
-        whitelist_check = [t for t in whitelist] + ['ec2-instance-connect', 's3outposts', 's3tables', 's3vectors']
-        kept, removed = implementation.whitelist_prune_services(
-            whitelist_targets=whitelist,
-            keep_prefix=True,
-            dry_run=True,
-        )
-        self.assertCountEqual(kept, whitelist_check)
     
-    def test_whitelist_prune_services_no_prefix(self):
+    def test_whitelist_prune_services(self):
         whitelist = ['s3', 's3control', 'ec2']
         whitelist_check = [t for t in whitelist]
         kept, removed = implementation.whitelist_prune_services(
             whitelist_targets=whitelist,
-            keep_prefix=False,
             dry_run=True,
         )
         self.assertCountEqual(kept, whitelist_check)
@@ -59,12 +48,11 @@ class TestBotoprune(unittest.TestCase):
         service_count = len(services)
         self.assertTrue(service_count > 100)
 
-        # Prune services using a whitelist without prefix expansion.
+        # Prune services using a whitelist.
         whitelist = ['s3', 's3control', 'ec2']
         whitelist_check = [t for t in whitelist]
         kept, removed = implementation.whitelist_prune_services(
             whitelist_targets=whitelist,
-            keep_prefix=False,
             dry_run=False,
         )
         self.assertCountEqual(kept, whitelist_check)

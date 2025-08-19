@@ -15,7 +15,6 @@
 import botocore
 import os
 import shutil
-from collections import defaultdict
 
 try:
     import botocore.data as botocore_data
@@ -89,14 +88,11 @@ def remove_services(remove_targets: list[str], dry_run: bool):
     return kept_services, removed_services
 
 
-def whitelist_prune_services(whitelist_targets: list[str], keep_prefix: bool, dry_run: bool):
+def whitelist_prune_services(whitelist_targets: list[str], dry_run: bool):
     """Prune botocore data to only include the specified services.
 
     Args:
         whitelist_targets: List of services to keep.
-        keep_prefix: If set to true, then any whitelisted service will also
-                     whitelist services with the same prefix. For example s3
-                     would transitively whitelist s3control, s3outposts, etc.
         dry_run: If set to true, then do not actually delete any services, just
                  print what would be deleted.
 
@@ -107,26 +103,8 @@ def whitelist_prune_services(whitelist_targets: list[str], keep_prefix: bool, dr
     """
     data_dir, botocore_services = list_installed_botocore_services()
 
-    # Create dict to find prefix whitelisted services. This takes advantage of
-    # the alphabetical ordering of the services to create a dictionary of
-    # services with the same prefix.
-    if keep_prefix:
-        prefix_whitelist = defaultdict(list)
-        for i in range(len(botocore_services)):
-            service_prefix = botocore_services[i]
-            j = i + 1
-            while j < len(botocore_services) and botocore_services[j].startswith(service_prefix):
-                prefix_whitelist[service_prefix].append(botocore_services[j])
-                j += 1
-    else:
-        prefix_whitelist = {}
-
     # Create set of services to keep including transitive whitelist members.
-    full_whitelist = list(whitelist_targets)
-    for service in whitelist_targets:
-        if service in prefix_whitelist:
-            full_whitelist.extend(prefix_whitelist[service])
-    full_whitelist = set(full_whitelist)
+    full_whitelist = set(whitelist_targets)
 
     # Set of services that were whitelisted but not found in botocore.
     whitelist_failures = [s for s in full_whitelist if s not in botocore_services]

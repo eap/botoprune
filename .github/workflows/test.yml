@@ -1,0 +1,67 @@
+name: Python Tests
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Unit Tests
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+        python -m pip install .[test]
+        pytest
+        # Run destructive tests
+        pytest -m destructive
+        # Clean up
+        deactivate
+        rm -rf venv
+    
+    - name: Module Test
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+        python -m pip install boto3
+        python -m pip install .
+        # Validate installation.
+        BOTO_DATA_COUNT=$(ls -l venv/lib/python3.10/site-packages/botocore/data/ | wc -l)
+        if [ $BOTO_DATA_COUNT -lt 100 ]; then
+          echo "Boto data directory has less than 100 files, somthing is wrong with the installation"
+          exit 1
+        fi
+        # Test whitelist.
+        echo "."
+        echo "."
+        echo  "Testing botoprune.whitelist - keeping s3 and ec2"
+        python -m botoprune.whitelist s3 ec2
+        BOTO_DATA_COUNT=$(ls -l venv/lib/python3.10/site-packages/botocore/data/ | wc -l)
+        if [ $BOTO_DATA_COUNT -gt 15 ]; then
+          echo "Boto data was not pruned"
+          exit 1
+        else
+          echo "Result validated; most content of 'botocore/data' was removed"
+        fi
+        # Test remove.
+        echo "."
+        echo "."
+        echo "Testing botoprune.remove - removing s3"
+        python -m botoprune.remove s3
+        if [ -d venv/lib/python3.10/site-packages/botocore/data/s3 ]; then
+          echo "s3 data was not removed"
+          exit 1
+        else
+          echo "Result validated; s3 data was removed"
+        fi
+        # Clean up
+        deactivate
