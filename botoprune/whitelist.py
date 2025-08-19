@@ -29,12 +29,6 @@ if __name__ == '__main__':
         help='List of AWS services to keep in botocore data.',
     )
     parser.add_argument(
-        '--keep-prefix',
-        default=True,
-        action=argparse.BooleanOptionalAction,
-        help='Keep services with the same prefix (ex. s3 would keep s3control, s3outposts, etc.)',
-    )
-    parser.add_argument(
         '--dry-run',
         default=False,
         action=argparse.BooleanOptionalAction,
@@ -46,7 +40,6 @@ if __name__ == '__main__':
     try:
         kept_services, pruned_services = whitelist_prune_services(
             whitelist_targets=args.keep_services,
-            keep_prefix=args.keep_prefix,
             dry_run=args.dry_run,
         )
     except BotoPruneError as e:
