@@ -15,7 +15,6 @@
 import botocore
 import os
 import shutil
-from collections import defaultdict
 
 try:
     import botocore.data as botocore_data
