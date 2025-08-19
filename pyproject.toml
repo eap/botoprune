@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = 'botoprune'
-version = '1.0.0'
+version = '1.1.0'
 description = "Reduce the installed size of botocore by removing unnecessary AWS api data."
 readme = {file = 'README.md', content-type='text/markdown'}
 authors = [
