@@ -49,6 +49,8 @@ jobs:
         if [ $BOTO_DATA_COUNT -gt 15 ]; then
           echo "Boto data was not pruned"
           exit 1
+        else
+          echo "Result validated; most content of 'botocore/data' was removed"
         fi
         # Test remove.
         echo "."
@@ -58,4 +60,8 @@ jobs:
         if [ -d venv/lib/python3.10/site-packages/botocore/data/s3 ]; then
           echo "s3 data was not removed"
           exit 1
+        else
+          echo "Result validated; s3 data was removed"
         fi
+        # Clean up
+        deactivate
