@@ -41,6 +41,7 @@ jobs:
           exit 1
         fi
         # Test whitelist.
+        echo -e "\n\nTesting botoprune.whitelist - keeping s3 and ec2"
         python -m botoprune.whitelist s3 ec2
         BOTO_DATA_COUNT=$(ls -l venv/lib/python3.10/site-packages/botocore/data/ | wc -l)
         if [ $BOTO_DATA_COUNT -gt 15 ]; then
@@ -48,6 +49,7 @@ jobs:
           exit 1
         fi
         # Test remove.
+        echo -e "\n\nTesting botoprune.remove - removing s3"
         python -m botoprune.remove s3
         if [ -d venv/lib/python3.10/site-packages/botocore/data/s3 ]; then
           echo "s3 data was not removed"
